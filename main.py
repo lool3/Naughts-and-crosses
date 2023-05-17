@@ -16,29 +16,26 @@ def display_grid():
     print("+---+---+---+")
 
 def scan_grid(x, y, player):
-  if (grid[-y][0] == grid[-y][1] == grid[-y][2] == player or
-      grid[0][x-1] == grid[1][x-1] == grid[2][x-1] == player or
-      grid[0][0] == grid[1][1] == grid[2][2] == player or
-      grid[0][2] == grid[1][1] == grid[2][0] == player):
-      return f"{player} wins!"
-  elif 1 == 2:
-    """
-    TODO Make something to detect a draw
-    """
-    pass
-  else:
-    return None
+    if (grid[-y][0] == grid[-y][1] == grid[-y][2] == player or
+        grid[0][x-1] == grid[1][x-1] == grid[2][x-1] == player or
+        grid[0][0] == grid[1][1] == grid[2][2] == player or
+        grid[0][2] == grid[1][1] == grid[2][0] == player):
+        return f"{player} wins!"
+    elif all(grid[i][j] for i in range(3) for j in range(3)):
+        return "It's a draw!"
+    else:
+        return None
 
 def play(player):
     coords = {
-      "X":0,
-      "Y":0
+      "X": 0,
+      "Y": 0
     }
     for axis in coords: # For X, Y
       while True:
         try:
           coords_input = int(input(f"{axis} coordinate: "))
-          if coords_input in range(1,4): # Allow 1, 2 or 3
+          if coords_input in range(1, 4): # Allow 1, 2, or 3
             coords[axis] = coords_input
             break
           else:
@@ -46,7 +43,7 @@ def play(player):
             continue
         except ValueError:
           print("That's not an integer!")
-          
+
     x, y = coords.values()
     while True:
       if not grid[-y][x-1]: # Make sure empty
@@ -54,16 +51,18 @@ def play(player):
         break
       else:
         print("Sorry, you can't play there.")
-        
-    check = scan_grid(x, y, "X" if player else "O")
+    
+    display_grid()
+    check = scan_grid(x, y, player)
     if check: # Check for winner / draw
       print(check)
-      exit(1)
+      exit(0)
+
     
 def main():
+    display_grid()
     player = True # = X
     while True:
-      display_grid()
       play("X" if player else "O")
       player = not player
 
