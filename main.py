@@ -13,7 +13,8 @@ def display_grid():
           print(" ", end=' | ')
       print()
     print("+---+---+---+")
-def scan_grid(x, y, player):
+def scan_grid(coords, player):
+    x, y = coords.values()
     if (grid[-y][0] == grid[-y][1] == grid[-y][2] == player or
         grid[0][x-1] == grid[1][x-1] == grid[2][x-1] == player or
         grid[0][0] == grid[1][1] == grid[2][2] == player or
@@ -41,16 +42,15 @@ def play(player):
               continue
           except ValueError:
             print("That's not an integer!")
-  
-      x, y = coords.values()
-      if not grid[-y][x-1]: # Make sure empty
-        grid[-y][x-1] = player
+      
+      if not grid[-coords["Y"]][coords["X"]-1]: # Make sure empty
+        grid[-coords["Y"]][coords["X"]-1] = player
         break
       else:
         print("Sorry, you can't play there.")
     
     display_grid()
-    check = scan_grid(x, y, player)
+    check = scan_grid(coords, player)
     if check: # Check for winner / draw
       print(check)
       exit(0)
@@ -62,4 +62,4 @@ def main():
       play("X" if player else "O")
       player = not player
 if __name__ == "__main__":
-  main()
+    main()
